@@ -1,0 +1,40 @@
+{
+  "name": "proyectobackend_certificacion1",
+  "version": "1.0.0",
+  "description": "Sistema de gestión de evaluación académica de estudiantes",
+  "main": "index.js",
+    "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage --silent --forceExit",
+    "test:debug": "cross-env NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand --coverage --detectOpenHandles"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maurocuba/ProyectoBackend_Certificacion1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/maurocuba/ProyectoBackend_Certificacion1/issues"
+  },
+  "homepage": "https://github.com/maurocuba/ProyectoBackend_Certificacion1#readme",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-openapi-validator": "^5.6.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.7.2",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
+    "supertest": "^7.2.2"
+  }
+}

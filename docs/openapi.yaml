@@ -1,0 +1,1652 @@
+openapi: 3.0.3
+
+info:
+  title: Evaluator gestor API
+  version: 1.0.0
+  description: Sistema de gestión de evaluación académica de estudiantes 
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+
+paths:
+  /api/users:
+    get:
+      summary: Obtener todos los usuarios
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserListResponse"
+  
+  /api/users/{id}:
+    get:
+      summary: Obtener un usuario por ID
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Usuario no encontrado
+    
+    put:
+      summary: Actualizar un usuario por ID
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        "200":
+          description: Usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario por ID
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Usuario eliminado correctamente
+        "404":
+          description: Usuario no encontrado
+  
+  /api/users/register:
+    post:
+      summary: Registrar un nuevo usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserRequest"
+      responses:
+        "200":
+          description: Usuario registrado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Usuario con el mismo correo ya existe
+
+  /api/users/login:
+    post:
+      summary: Iniciar sesión de usuario
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginRequest"
+      responses:
+        "200":
+          description: Inicio de sesión exitoso
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LoginResponse"
+        "401":
+          description: Credenciales inválidas
+  /api/users/{id}/role:
+    patch:
+      summary: Actualizar el rol de un usuario por ID
+      tags:
+        - Users
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del usuario
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RoleRequest"
+      responses:
+        "200":
+          description: Rol del usuario actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: Usuario no encontrado
+  
+  /api/students:
+    get:
+      summary: Obtener todos los estudiantes
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de estudiantes obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentListResponse"
+    post:
+      summary: Crear un nuevo estudiante
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentRequest"
+      responses:
+        "200":
+          description: Estudiante creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "400":
+          description: Error al crear el estudiante
+
+  /api/students/{id}:
+    get:
+      summary: Obtener un estudiante por ID
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Estudiante obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "404":
+          description: Estudiante no encontrado
+    
+    put:
+      summary: Actualizar un estudiante por ID
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentRequest"
+      responses:
+        "200":
+          description: Estudiante actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentResponse"
+        "404":
+          description: Estudiante no encontrado
+    
+    delete:
+      summary: Eliminar un estudiante por ID
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Estudiante eliminado correctamente
+        "404":
+          description: Estudiante no encontrado
+    
+  /api/teachers:
+    get:
+      summary: Obtener todos los profesores
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de profesores obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherListResponse"
+    
+    post:
+      summary: Crear un nuevo profesor
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherRequest"
+      responses:
+        "200":
+          description: Profesor creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherResponse"
+        "400":
+          description: Error al crear el profesor
+
+  /api/teachers/{id}:
+    get:
+      summary: Obtener un profesor por ID
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del profesor
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profesor obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherResponse"
+        "404":
+          description: Profesor no encontrado
+    
+    put:
+      summary: Actualizar un profesor por ID
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del profesor
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherRequest"
+      responses:
+        "200":
+          description: Profesor actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherResponse"
+        "404":
+          description: Profesor no encontrado
+    
+    delete:
+      summary: Eliminar un profesor por ID
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del profesor
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Profesor eliminado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TeacherResponse"
+        "404":
+          description: Profesor no encontrado
+
+  /api/courses:
+    get:
+      summary: Obtener todos los cursos
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de cursos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseListResponse"
+    post:
+      summary: Crear un nuevo curso
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseRequest"
+      responses:
+        "200":
+          description: Curso creado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "400":
+          description: Error al crear el curso
+
+  /api/courses/{id}:
+    get:
+      summary: Obtener un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Curso obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "404":
+          description: Curso no encontrado
+    
+    put:
+      summary: Actualizar un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseRequest"
+      responses:
+        "200":
+          description: Curso actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "404":
+          description: Curso no encontrado
+    
+    delete:
+      summary: Eliminar un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Curso eliminado correctamente
+        "404":
+          description: Curso no encontrado
+  
+  /api/courses/{id}/teacher:
+    patch:
+      summary: Actualizar el profesor de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TeacherIdRequest"
+      responses:
+        "200":
+          description: Profesor del curso actualizado correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "404":
+          description: Curso no encontrado
+
+  /api/courses/{id}/students:
+    get:
+      summary: Obtener todos los estudiantes de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de estudiantes del curso obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentListResponse"
+        "404":
+          description: Curso no encontrado
+    post:
+      summary: Agregar un estudiante a un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentIdRequest"
+      responses:
+        "200":
+          description: Estudiante agregado al curso correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "404":
+          description: Curso no encontrado
+  /api/courses/{id}/students/{studentId}:
+    delete:
+      summary: Eliminar un estudiante de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+        - name: studentId
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Estudiante eliminado del curso correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseResponse"
+        "404":
+          description: Curso o estudiante no encontrado
+  /api/teachers/{id}/courses:
+    get:
+      summary: Obtener todos los cursos de un profesor por ID
+      tags:
+        - Teachers
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del profesor
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de cursos del profesor obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseListResponse"
+        "404":
+          description: Profesor no encontrado
+
+  /api/students/{id}/courses:
+    get:
+      summary: Obtener todos los cursos de un estudiante por ID
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de cursos del estudiante obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseListResponse"
+        "404":
+          description: Estudiante no encontrado
+    
+  /api/evaluations:
+    get:
+      summary: Obtener todas las evaluaciones
+      tags:
+        - Evaluations
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de evaluaciones obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationListResponse"
+    
+    post:
+      summary: Crear una nueva evaluación
+      tags:
+        - Evaluations
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluationRequest"
+      responses:
+        "200":
+          description: Evaluación creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationResponse"
+        "400":
+          description: Error al crear la evaluación
+
+  /api/evaluations/{id}:
+    get:
+      summary: Obtener una evaluación por ID
+      tags:
+        - Evaluations
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la evaluación
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Evaluación obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationResponse"
+        "404":
+          description: Evaluación no encontrada
+    
+    put:
+      summary: Actualizar una evaluación por ID
+      tags:
+        - Evaluations
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la evaluación
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluationRequest"
+      responses:
+        "200":
+          description: Evaluación actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationResponse"
+        "404":
+          description: Evaluación no encontrada
+    
+    delete:
+      summary: Eliminar una evaluación por ID
+      tags:
+        - Evaluations
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la evaluación
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Evaluación eliminada correctamente
+        "404":
+          description: Evaluación no encontrada
+  
+  /api/courses/{id}/evaluations:
+    get:
+      summary: Obtener todas las evaluaciones de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de evaluaciones del curso obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationListResponse"
+        "404":
+          description: Curso no encontrado
+
+  /api/grades:
+    get:
+      summary: Obtener todas las calificaciones
+      tags:
+        - Grades
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: Lista de calificaciones obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeListResponse"
+    
+    post:
+      summary: Crear una nueva calificación
+      tags:
+        - Grades
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GradeRequest"
+      responses:
+        "200":
+          description: Calificación creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeResponse"
+        "400":
+          description: Error al crear la calificación
+
+  /api/grades/{id}:
+    get:
+      summary: Obtener una calificación por ID
+      tags:
+        - Grades
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la calificación
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Calificación obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeResponse"
+        "404":
+          description: Calificación no encontrada
+    put:
+      summary: Actualizar una calificación por ID
+      tags:
+        - Grades
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la calificación
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GradeRequest"
+      responses:
+        "200":
+          description: Calificación actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeResponse"
+        "404":
+          description: Calificación no encontrada
+  /api/grades/{id}/observation:
+    patch:
+      summary: Actualizar la observación de una calificación por ID
+      tags:
+        - Grades
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID de la calificación
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ObservationRequest"
+      responses:
+        "200":
+          description: Observación de la calificación actualizada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeResponse"
+        "404":
+          description: Calificación no encontrada
+  
+  /api/students/{id}/grades:
+    get:
+      summary: Obtener todas las calificaciones de un estudiante por ID
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de calificaciones del estudiante obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeListResponse"
+        "404":
+          description: Estudiante no encontrado
+  
+  /api/students/{id}/courses/{courseId}/grades:
+    get:
+      summary: Obtener todas las calificaciones de un estudiante en un curso específico
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+        - name: courseId
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de calificaciones del estudiante en el curso obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeListResponse"
+        "404":
+          description: Estudiante o curso no encontrado
+  
+  /api/students/{id}/courses/{courseId}/evaluations:
+    get:
+      summary: Obtener todas las evaluaciones de un estudiante en un curso específico
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+        - name: courseId
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Lista de evaluaciones del estudiante en el curso obtenida correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluationListResponse"
+        "404":
+          description: Estudiante o curso no encontrado
+  
+  /api/students/{id}/courses/{courseId}/average:
+    get:
+      summary: Obtener el promedio de calificaciones de un estudiante en un curso específico
+      tags:
+        - Students
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del estudiante
+          schema:
+            type: string
+        - name: courseId
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Promedio de calificaciones del estudiante en el curso obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AverageResponse"
+        "404":
+          description: Estudiante o curso no encontrado
+
+  /api/courses/{id}/report:
+    get:
+      summary: Obtener un reporte de calificaciones de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Reporte de calificaciones del curso obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GradeListResponse"
+        "404":
+          description: Curso no encontrado
+  
+  /api/courses/{id}/averages:
+    get:
+      summary: Ver el promedio de calificaciones de un curso por ID
+      tags:
+        - Courses
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID del curso
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Promedio de calificaciones del curso obtenido correctamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AverageResponse"
+        "404":
+          description: Curso no encontrado
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+        role:
+          type: string
+          enum:
+            - student
+            - teacher
+            - admin
+          example: student
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    Student:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        userId:
+          type: string
+          example: 1234567890abcdef
+        studentCode:
+          type: integer
+          example: 20230001
+        career:
+          type: string
+          example: Computer Science
+        semester:
+          type: integer
+          example: 3
+    Teacher:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        userId:
+          type: string
+          example: 0987654321fedcba
+        teacherCode:
+          type: integer
+          example: 516
+        subjectsCanTeach:
+          type: array
+          items:
+            type: string
+          example: [Computer Science, Mathematics]
+    Grade:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        studentId:
+          type: string
+          example: 1234567890abcdef
+        evaluationId:
+          type: string
+          example: EVAL20230001
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          example: 8.5
+        observation:
+          type: string
+          example: Good performance, but needs improvement in practical exercises.
+        dateRegistered:
+          type: string
+          format: date
+          example: 2023-05-04
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    Evaluation:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        courseId:
+          type: string
+          example: 0987654321fedcba
+        title:
+          type: string
+          example: Computer Science
+        description:
+          type: string
+          example: Final exam for Computer Science course
+        type:
+          type: string
+          enum:
+            - exam
+            - assignment
+            - project
+          example: exam
+        date:
+          type: string
+          format: date
+          example: 2023-05-10
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1234567890abcdef
+        name:
+          type: string
+          example: Computer Science
+        description:
+          type: string
+          example: Introduction to Computer Science course
+        code:
+          type: integer
+          example: 3
+        teacherId:
+          type: string
+          example: 0987654321fedcba
+        studentIds:
+          type: array
+          items:
+            type: string
+          example: [1234567890abcdef, 0987654321fedcba]
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    UserResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: User retrieved successfully
+        data:
+          $ref: "#/components/schemas/User"
+    UserListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of users retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+    StudentListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of students retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Student"
+    StudentResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Student retrieved successfully
+        data:
+          $ref: "#/components/schemas/Student"
+    
+    TeacherListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of teachers retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Teacher"
+    
+    TeacherResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Teacher retrieved successfully
+        data:
+          $ref: "#/components/schemas/Teacher"
+    
+    CourseListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of courses retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Course"
+    
+    CourseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Course retrieved successfully
+        data:
+          $ref: "#/components/schemas/Course"
+    
+    EvaluationListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of evaluations retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Evaluation"
+    
+    EvaluationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Evaluation retrieved successfully
+        data:
+          $ref: "#/components/schemas/Evaluation"
+    
+    EvaluationRequest:
+      type: object
+      required:
+        - courseId
+        - title
+        - description
+        - type
+        - date
+        - status
+      properties:
+        courseId:
+          type: string
+          example: 0987654321fedcba
+        title:
+          type: string
+          example: Final Exam
+        description:
+          type: string
+          example: Final exam for the Computer Science course
+        type:
+          type: string
+          enum:
+            - exam
+            - assignment
+            - project
+          example: exam
+        date:
+          type: string
+          format: date
+          example: 2023-05-10
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+
+    GradeListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: List of grades retrieved successfully
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Grade" 
+    
+    GradeResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Grade retrieved successfully
+        data:
+          $ref: "#/components/schemas/Grade"
+    
+    GradeRequest:
+      type: object
+      required:
+        - studentId
+        - evaluationId
+        - score
+        - observation
+        - dateRegistered
+        - status
+      properties:
+        studentId:
+          type: string
+          example: 1234567890abcdef
+        evaluationId:
+          type: string
+          example: EVAL20230001
+        score:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          example: 8.5
+        observation:
+          type: string
+          example: Good performance, but needs improvement in practical exercises.
+        dateRegistered:
+          type: string
+          format: date
+          example: 2023-05-04
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+          
+
+    UserRequest:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - role
+        - status
+      properties:
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          example: SecurePassword123
+        role:
+          type: string
+          enum:
+            - student
+            - teacher
+            - admin
+          example: student
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: john.doe@example.com
+        password:
+          type: string
+          format: password
+          example: SecurePassword123
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Login successful
+        data:
+          $ref: "#/components/schemas/Login"
+    
+    AverageResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Average of grades retrieved successfully
+        data:
+          type: number
+          format: float
+          minimum: 0
+          maximum: 100
+          example: 8.5
+
+    Login:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjEyMzQ1Njc4OTBhYmNkZWYiLCJuYW1lIjoiSm9obiBEb2UiLCJlbWFpbCI6ImpvaG4uZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6InN0dWRlbnQiLCJpYXQiOjE2MTYyMzkwMjIsImV4cCI6MTYxNjI0MjYyMn0.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+    RoleRequest:
+      type: object
+      required:
+        - role
+      properties:
+        role:
+          type: string
+          enum:
+            - student
+            - teacher
+            - admin
+          example: teacher
+    StudentRequest:
+      type: object
+      required:
+        - userId
+        - studentCode
+        - career
+        - semester
+      properties:
+        userId:
+          type: string
+          example: 1234567890abcdef
+        studentCode:
+          type: integer
+          example: 20230001
+        career:
+          type: string
+          example: Computer Science
+        semester:
+          type: integer
+          minimum: 1
+          maximum: 10
+          example: 3
+    TeacherRequest:
+      type: object
+      required:
+        - userId
+        - teacherCode
+        - subjectsCanTeach
+      properties:
+        userId:
+          type: string
+          example: 0987654321fedcba
+        teacherCode:
+          type: integer
+          example: 516
+        subjectsCanTeach:
+          type: array
+          items:
+            type: string
+          example: [Computer Science, Mathematics]
+    CourseRequest:
+      type: object
+      required:
+        - name
+        - description
+        - code
+        - teacherId
+        - studentIds
+        - status
+      properties:
+        name:
+          type: string
+          example: Computer Science
+        description:
+          type: string
+          example: Introduction to Computer Science course
+        code:
+          type: integer
+          example: 3
+        teacherId:
+          type: string
+          example: 0987654321fedcba
+        studentIds:
+          type: array
+          items:
+            type: string
+          example: [1234567890abcdef, 0987654321fedcba]
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+          example: active
+    TeacherIdRequest:
+      type: object
+      required:
+        - teacherId
+      properties:
+        teacherId:
+          type: string
+          example: 0987654321fedcba
+    StudentIdRequest:
+      type: object
+      required:
+        - studentId
+      properties:
+        studentId:
+          type: string
+          example: 1234567890abcdef
+
+    ObservationRequest:
+      type: object
+      required:
+        - observation
+      properties:
+        observation:
+          type: string
+          example: Needs improvement in practical exercises.
