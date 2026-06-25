@@ -6,8 +6,10 @@ info:
   description: Sistema de gestión de evaluación académica de estudiantes 
 
 servers:
-  - url: https://localhost:3000
+  - url: http://localhost:3000
     description: Servidor local
+  - url: https://proyectofinal-certi-express-grupo-11.onrender.com
+    description: Servidor en Render
 
 paths:
   /api/users:
